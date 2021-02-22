@@ -48,14 +48,17 @@ class MainActivity : AppCompatActivity() {
     fun delete(view: View) {
         when (view.id) {
             R.id.buttonback -> {
-
                 currentNumber = currentNumber.dropLast(1)
                 numberScreen.setText(numberScreen.text.toString().dropLast(1))
-
                 if (opCounter)
                 {
                     operatorList.removeAt(operatorList.lastIndex)
                     opCounter = false
+                    currentNumber = numberList.get(numberList.lastIndex).toString()
+                    numberList.removeAt(numberList.lastIndex)
+                    numberScreen.setText(currentNumber)
+
+
                 }
 
             }
@@ -92,20 +95,26 @@ class MainActivity : AppCompatActivity() {
      * This method performs the operation according to the operators pressed by the user.
      */
     @SuppressLint("SetTextI18n")
-    fun operators(view: View)
-    {
-        /**This block of code will operate only when operator is pressed by the user, except '=' operator.*/
-        if (view.id != R.id.buttonequal)
-        {
+    fun operators(view: View) {
+        if (view.id != R.id.buttonequal) {
             buttonOperator = view as Button
-            /**Condition statement to stop user from entering multiple operators.*/
-            if(opCounter == false)
+            Log.d("Operators","entered operator method")
+            if (numberScreen.text.toString() == "" &&  view.id == R.id.buttonsub){
+                currentNumber +="-"
+                numberScreen.text = currentNumber
+            }
+            else if(numberScreen.text.toString() == ""){
+                return
+            }
+            else if(!opCounter || view.id == R.id.buttonadd || view.id == R.id.buttonsub)
             {
-                /**Condition makes the current number to enter the numberList if it is not empty.*/
+                Log.d("operator",opCounter.toString())
                 if (currentNumber != "")
                 {
+                    Log.d("Operators", currentNumber)
+
                     numberList.add(currentNumber.toDouble())
-                    Log.d("Operators",currentNumber)
+                    Log.d("operator",currentNumber.toDouble().toString())
                     currentNumber = ""
                     numberScreen.setText(numberScreen.text.toString() + buttonOperator.text.toString())
                     operatorList.add(buttonOperator.text.toString())
@@ -113,47 +122,60 @@ class MainActivity : AppCompatActivity() {
                 }
                 else
                 {
-                    /**If currentNumber is not entered.*/
-                    numberScreen.text = numberScreen.text.toString() + buttonOperator.text.toString()
-                    Log.d("operator",operatorList.lastIndex.toString())
                     if (operatorList.lastIndex == -1)
                     {
                         operatorList.add(buttonOperator.text.toString())
                     }
-                    operatorList.set(operatorList.lastIndex, buttonOperator.text.toString())
-                    opCounter = true
+
+                    else if(numberScreen.text.toString().takeLast(1) == "*" && view.id == R.id.buttonsub ||
+                            numberScreen.text.toString().takeLast(1) == "/" && view.id == R.id.buttonsub){
+                        currentNumber += "-"
+                        numberScreen.text = numberScreen.text.toString()+ buttonOperator.text.toString()
+                    }
+                    else {
+                        operatorList.set(operatorList.lastIndex, buttonOperator.text.toString())
+                        opCounter = true
+                        numberScreen.text = numberScreen.text.toString().dropLast(1) + buttonOperator.text.toString()
+                    }
+
+
                 }
             }
         }
-            else
+        else
+        {
+            if (currentNumber != "")
             {
-                /**This block of code will run only when the '=' is pressed.*/
-                if (currentNumber != "")
+                Log.d("Operators", "when = is pressed")
+                Log.d("Operators", currentNumber)
+
+                numberList.add(currentNumber.toDouble())
+                currentNumber = ""
+                for (i in 0..operatorList.size-1)
                 {
-                    numberList.add(currentNumber.toDouble())
-                    currentNumber = ""
-                    for (i in 0..operatorList.size-1)
+                    if (i == 0)
                     {
-                        if (i == 0)
-                        {
-                            input1 = numberList.get(i)
-                            input2 = numberList.get(i+1)
-                            input1 = calculate(input1, input2, operatorList.get(i))
-                        }
-                        else
-                        {
-                            input2 = numberList.get(i + 1)
-                            input1 = calculate(input1, input2, operatorList.get(i))
-                        }
+                        input1 = numberList.get(i)
+                        input2 = numberList.get(i+1)
+                        input1 = calculate(input1, input2, operatorList.get(i))
+
                     }
-                    outputScreen.setText(input1.toString())
-                    numberList.clear()
-                    operatorList.clear()
-                    currentNumber = input1.toString()
-                    numberScreen.text = currentNumber
+                    else
+                    {
+                        input2 = numberList.get(i + 1)
+                        input1 = calculate(input1, input2, operatorList.get(i))
+                    }
                 }
+                outputScreen.setText(input1.toString())
+                numberList.clear()
+                operatorList.clear()
+                currentNumber = input1.toString()
+                numberScreen.text = currentNumber
             }
+
+        }
     }
+
     /**
      *The method 'calculate' is responsible to perform the operation on the operators
      *according to the operator pressed by the user.
