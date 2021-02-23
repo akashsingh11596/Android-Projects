@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
                     operatorList.add(buttonOperator.text.toString())
                     opCounter = true
                 }
-                // if the above condition is false then this portion of code will execute.
+                // If the above condition is false then this portion of code will execute.
                 else {
                     // Condition to check if the operator list is empty.
                     if (operatorList.lastIndex == -1) {
@@ -136,17 +136,12 @@ class MainActivity : AppCompatActivity() {
                         opCounter = true
                         numberScreen.text = numberScreen.text.toString().dropLast(1) + buttonOperator.text.toString()
                     }
-
-
                 }
             }
         }
         // Block of code will execute when '=' is pressed.
         else {
             if (currentNumber != "") {
-                Log.d("Operators", "when = is pressed")
-                Log.d("Operators", currentNumber)
-
                 numberList.add(currentNumber.toDouble())
                 currentNumber = ""
                 for (i in 0..operatorList.size - 1) {
@@ -154,7 +149,6 @@ class MainActivity : AppCompatActivity() {
                         input1 = numberList.get(i)
                         input2 = numberList.get(i + 1)
                         input1 = calculate(input1, input2, operatorList.get(i))
-
                     } else {
                         input2 = numberList.get(i + 1)
                         input1 = calculate(input1, input2, operatorList.get(i))
@@ -178,19 +172,15 @@ class MainActivity : AppCompatActivity() {
     fun calculate(in1: Double, in2: Double, op: String): Double {
         when (op) {
             "+" -> {
-                Log.d("calc", "add")
                 return (in1 + in2)
             }
             "-" -> {
-                Log.d("calc", "substract")
                 return (in1 - in2)
             }
             "*" -> {
-                Log.d("calc", "multiply")
                 return (in1 * in2)
             }
             "/" -> {
-                Log.d("calc", "divide")
                 return (in1 / in2)
             }
         }
