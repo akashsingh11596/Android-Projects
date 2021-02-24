@@ -43,6 +43,11 @@ class MainActivity : AppCompatActivity() {
                     editNameViewScreen?.setText(rs.getString(1))
                     editMeaningViewScreen?.setText(rs.getString(2))
                 }
+                else if(rs.moveToFirst())
+                {
+                    editNameViewScreen?.setText(rs.getString(1))
+                    editMeaningViewScreen?.setText(rs.getString(2))
+                }
             }
         }
 
