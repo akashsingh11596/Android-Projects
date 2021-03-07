@@ -54,11 +54,9 @@ public class GetRawData extends AsyncTask<String, Void, String> {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
             String line;
-            while(null!= (line = reader.readLine()))
-            {
-                result.append(line).append("\n")
+            while(null!= (line = reader.readLine())) {
+                result.append(line).append("\n");
             }
-
             mDownloadStatus =DownloadStatus.OK;
             return result.toString(); //.toString id done because we are returing String value in doInBackground() but
             // the result is assigned as the variable  of StringBuilder.
@@ -88,7 +86,6 @@ public class GetRawData extends AsyncTask<String, Void, String> {
                 }
             }
         }
-
         return null;
     }
 }
