@@ -53,6 +53,16 @@ public class GetRawData extends AsyncTask<String, Void, String> {
 
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 
+            String line;
+            while(null!= (line = reader.readLine()))
+            {
+                result.append(line).append("\n")
+            }
+
+            mDownloadStatus =DownloadStatus.OK;
+            return result.toString(); //.toString id done because we are returing String value in doInBackground() but
+            // the result is assigned as the variable  of StringBuilder.
+
 
         }catch (MalformedURLException e)
         {
@@ -63,6 +73,20 @@ public class GetRawData extends AsyncTask<String, Void, String> {
         }catch (SecurityException e)
         {
             Log.e(TAG, "doInBackground: Security Exception. Needs Permission?"+ e.getMessage());
+        }finally {
+            if(connection!=null)
+            {
+                connection.disconnect();
+            }
+            if(reader!=null)
+            {
+                try {
+                    reader.close();
+                } catch(IOException e)
+                {
+                    Log.e(TAG, "doInBackground: Error closing strings"+ e.getMessage());
+                }
+            }
         }
 
         return null;
